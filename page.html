@@ -1,0 +1,72 @@
+
+<html>
+	<h1 style="text-align:center;background-color: black;color: white;margin-top: 10px">Smart Waste Management System</h1>
+	<table>
+  <tr>
+    <th>Location</th>
+    <th>Status</th>
+  </tr>
+  <tr>
+    <td id="data1"></td>
+    <td id="data2"></td>
+  </tr>
+</table>
+
+</html>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 50%; 
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+<script>
+	var fun=function(){
+var url='https://garbage-sensor-data.firebaseio.com/Vidhyanagar.json';
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    var request = new XMLHttpRequest();
+    request.open('GET',proxyurl+url);
+    request.responseType = 'json';
+//  request.addHeader("Access-Control-Allow-Origin", "*");
+    request.send();
+    var onday=request.response;
+var xmlhttp = new XMLHttpRequest();
+
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+         rawdata = JSON.parse(this.responseText);
+         console.log(rawdata);
+         var d1= document.getElementById("data1");
+         var d2= document.getElementById("data2");
+       //  d1.innerHtml=rawdata.name;
+         //d2.innerHtml=rawdata.value;
+         document.getElementById("data1").innerHTML = "Vidhyanagar_01";
+         if(rawdata.distance.value<500)
+         {     
+          document.getElementById("data2").innerHTML = "Full"; 
+      	 }
+      	 else if(rawdata.distance.value>500 && rawdata.distance.value<1000)
+      	 {
+      	 	document.getElementById("data2").innerHTML = "Half"; 
+      	 }
+      	 else
+      	 {
+      	  document.getElementById("data2").innerHTML ="empty";
+      	 }
+     }
+};
+xmlhttp.open("GET",proxyurl+url, true);
+xmlhttp.send();
+};
+var timer=setInterval(fun,1000);
+</script>	
